@@ -1,5 +1,16 @@
 #include <iostream>
 #include <fstream>
+#include <string>
+
+class Token {
+public:
+  Token();
+  ~Token();
+
+private:
+  std::string type;
+  std::string value;
+};
 
 int main(int argc, char **argv){
   if (argc > 0 && argv[1] == nullptr){
