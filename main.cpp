@@ -1,13 +1,59 @@
+/* ------------
+ * Parsing = lexical + syntatical analysis
+ * ------------
+ * components:
+ * 1. lexer(tokenizer): scan input and generate tokens
+ * 2. IR or AST: forms the relations between tokens
+ *
+ * Token e.g.
+ * { type: 'paren',  value: '('   },
+ * { type: 'name',   value: 'add' },
+ * { type: 'number', value: '2'   },
+ *
+ * AST e.g.
+ *
+ * - Program
+ *   - CallExpression
+ *     - NumberLiteral
+ *     - CallExpression
+ *       - NumberLiteral
+ *       - NumberLiteral
+ *
+ * --------------
+ * Trasnformation
+ * --------------
+ * Manipulate AST nodes or create a new AST targeting a new language
+ *
+ * ---------------
+ * Code generation
+ * ---------------
+ * Generate machine code to target
+ *
+ *
+ * ---------------
+ * Implementation
+ * ---------------
+ * # lexer
+ * curr: current cursor in the file
+ * skip whitespace for token
+ *
+ * c++ keywords
+ * operator
+ * variables types: int, char
+ *
+ * # parser
+ * walk() tokens
+ * skip parenthesis
+ *
+ * # IR
+ * # Codegen
+ */
+
 #include <iostream>
 #include <fstream>
 #include <string>
 
-class Token {
-public:
-  Token();
-  ~Token();
-
-private:
+struct token{
   std::string type;
   std::string value;
 };
