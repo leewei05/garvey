@@ -52,11 +52,24 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 
 struct token{
   std::string type;
   std::string value;
 };
+
+// current cursor in the file
+int curr = 0;
+// current line in the file
+int cline;
+// tokens
+std::vector<token> tok;
+
+// token returns a sequence of tokens
+void token(std::string str){
+  std::cout << str << std::endl;
+}
 
 int main(int argc, char **argv){
   if (argc > 0 && argv[1] == nullptr){
@@ -67,14 +80,15 @@ int main(int argc, char **argv){
   std::fstream fs;
 
   fs.open(argv[1], std::fstream::in);
-
-  char c;
-  while(fs.get(c))
-    if (c != '\n'){
-      std::cout << c;
+  // check if fs is failing
+  if (fs){
+    std::string str;
+    while(std::getline(fs, str)){
+      token(str);
     }
 
-  fs.close();
+    fs.close();
+  }
 
   return 0;
 }
