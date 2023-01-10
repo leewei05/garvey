@@ -53,10 +53,23 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <unordered_map>
+
+enum class tokenAttr {
+  KEYWORD,
+  IDENTIFIER,
+  OPERATOR,
+  UNKNOWN
+};
+
+typedef std::unordered_map<tokenAttr, std::string> TokenAttrMap;
 
 struct token{
-  std::string type;
+  // reference to enum
+  int type;
   std::string value;
+  int loc;
+  int line;
 };
 
 // current cursor in the file
@@ -65,10 +78,21 @@ int curr = 0;
 int cline;
 // tokens
 std::vector<token> tok;
+// token attribute map
+TokenAttrMap tokMap;
+
+void init(){
+  tokMap.insert({tokenAttr::KEYWORD, "KEYWORD"});
+  tokMap.insert({tokenAttr::IDENTIFIER, "IDENTIFIER"});
+  tokMap.insert({tokenAttr::OPERATOR, "OPERATOR"});
+  tokMap.insert({tokenAttr::UNKNOWN, "UNKNOWN"});
+}
 
 // token returns a sequence of tokens
 void token(std::string str){
   std::cout << str << std::endl;
+  // todo: extract each string in a line
+  // Every string is separated by whitespace
 }
 
 int main(int argc, char **argv){
@@ -83,6 +107,9 @@ int main(int argc, char **argv){
   // check if fs is failing
   if (fs){
     std::string str;
+
+    // initiate token types map
+    init();
     while(std::getline(fs, str)){
       token(str);
     }
