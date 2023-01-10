@@ -62,7 +62,37 @@ enum class tokenAttr {
   UNKNOWN
 };
 
+enum class keyword {
+  BREAK,
+  CASE,
+  CHAR,
+  CONST,
+  CONTINUE,
+  DEFAULT,
+  DO,
+  DOUBLE,
+  ELSE,
+  ENUM,
+  FLOAT,
+  FOR,
+  IF,
+  INT,
+  LONG,
+  RETURN,
+  SHORT,
+  SIGNED,
+  STATIC,
+  STRUCT,
+  SWITCH,
+  TYPEDEF,
+  UNION,
+  UNSIGNED,
+  VOID,
+  WHILE
+};
+
 typedef std::unordered_map<tokenAttr, std::string> TokenAttrMap;
+typedef std::unordered_map<keyword, std::string> KeywordMap;
 
 struct token{
   // reference to enum
@@ -76,23 +106,70 @@ struct token{
 int curr = 0;
 // current line in the file
 int cline;
+// current token
+int tk;
 // tokens
-std::vector<token> tok;
+std::vector<token> tokens;
 // token attribute map
 TokenAttrMap tokMap;
+// keywords map
+KeywordMap kwMap;
 
 void init(){
+  // token type
   tokMap.insert({tokenAttr::KEYWORD, "KEYWORD"});
   tokMap.insert({tokenAttr::IDENTIFIER, "IDENTIFIER"});
   tokMap.insert({tokenAttr::OPERATOR, "OPERATOR"});
   tokMap.insert({tokenAttr::UNKNOWN, "UNKNOWN"});
+  // keywords
+  kwMap.insert({keyword::BREAK ,"BREAK"});
+  kwMap.insert({keyword::CASE ,"CASE"});
+  kwMap.insert({keyword::CHAR ,"CHAR"});
+  kwMap.insert({keyword::CONST ,"CONST"});
+  kwMap.insert({keyword::CONTINUE ,"CONTINUE"});
+  kwMap.insert({keyword::DEFAULT ,"DEFAULT"});
+  kwMap.insert({keyword::DO, "DO"});
+  kwMap.insert({keyword::DOUBLE, "DOUBLE"});
+  kwMap.insert({keyword::ELSE, "ELSE"});
+  kwMap.insert({keyword::ENUM, "ENUM"});
+  kwMap.insert({keyword::FLOAT, "FLOAT"});
+  kwMap.insert({keyword::FOR, "FOR"});
+  kwMap.insert({keyword::IF, "IF"});
+  kwMap.insert({keyword::INT, "INT"});
+  kwMap.insert({keyword::LONG, "LONG"});
+  kwMap.insert({keyword::RETURN, "RETURN"});
+  kwMap.insert({keyword::SHORT, "SHORT"});
+  kwMap.insert({keyword::SIGNED, "SIGNED"});
+  kwMap.insert({keyword::STATIC, "STATIC"});
+  kwMap.insert({keyword::STRUCT, "STRUCT"});
+  kwMap.insert({keyword::SWITCH, "SWITCH"});
+  kwMap.insert({keyword::TYPEDEF, "TYPEDEF"});
+  kwMap.insert({keyword::UNION, "UNION"});
+  kwMap.insert({keyword::UNSIGNED, "UNSIGNED"});
+  kwMap.insert({keyword::VOID, "VOID"});
+  kwMap.insert({keyword::WHILE, "WHILE"});
 }
 
-// token returns a sequence of tokens
-void token(std::string str){
-  std::cout << str << std::endl;
-  // todo: extract each string in a line
-  // Every string is separated by whitespace
+void next(){
+  // todo: extract tokens
+}
+
+bool openfile(std::string filename){
+  // binary mode: don't apply format to characters
+  std::ifstream in (filename, std::ifstream::binary);
+  if (in){
+    // end pos
+    in.seekg(0, in.end);
+    // get the total length of the source file
+    size_t length = in.tellg();
+    // back to the start pos
+    in.seekg(0, in.beg);
+
+    in.close();
+    return true;
+  }
+
+  return false;
 }
 
 int main(int argc, char **argv){
@@ -101,20 +178,15 @@ int main(int argc, char **argv){
     return 1;
   }
 
-  std::fstream fs;
+  bool o = openfile(argv[1]);
+  if (!o) return 1;
 
-  fs.open(argv[1], std::fstream::in);
-  // check if fs is failing
-  if (fs){
-    std::string str;
+  init();
+  // scan the program
+  cline = 1;
 
-    // initiate token types map
-    init();
-    while(std::getline(fs, str)){
-      token(str);
-    }
-
-    fs.close();
+  while(tk){
+    next();
   }
 
   return 0;
